@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>console.sql</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+console.sql</font>
+</center></td></tr></table>
+<pre><span class="s0">SET </span><span class="s1">search_path </span><span class="s0">TO </span><span class="s1">healthapp</span><span class="s0">;</span>
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;Patient&quot; (</span>
+  <span class="s1">&quot;patient_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;user_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;first_name&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;last_name&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;email_address&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;contact_number&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;age&quot; </span><span class="s0">INTEGER,</span>
+  <span class="s1">&quot;weight&quot; </span><span class="s0">INTEGER,</span>
+  <span class="s1">&quot;allergies&quot; </span><span class="s0">xml,</span>
+  <span class="s1">&quot;description&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">50</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;patient_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;Treatments&quot; (</span>
+  <span class="s1">&quot;treatment_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;patient_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;treatment&quot; </span><span class="s0">xml,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;treatment_id&quot;)</span><span class="s0">,</span>
+  <span class="s0">CONSTRAINT </span><span class="s1">&quot;FK_Treatments.patient_id&quot;</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(&quot;patient_id&quot;)</span>
+      <span class="s0">REFERENCES </span><span class="s1">&quot;Patient&quot;(&quot;patient_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;Pharmacist&quot; (</span>
+  <span class="s1">&quot;pharmacist_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;officer_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;first_name&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;last_name&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;email_address&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;contact_number&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;pharmacist_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;Medicine&quot; (</span>
+  <span class="s1">&quot;medicine_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;medicine_name&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;medicine_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;pharmacy-drug&quot; (</span>
+  <span class="s1">&quot;pharmacist_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;medicine_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s0">CONSTRAINT </span><span class="s1">&quot;FK_pharmacy-drug.pharmacist_id&quot;</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(&quot;pharmacist_id&quot;)</span>
+      <span class="s0">REFERENCES </span><span class="s1">&quot;Pharmacist&quot;(&quot;pharmacist_id&quot;)</span><span class="s0">,</span>
+  <span class="s0">CONSTRAINT </span><span class="s1">&quot;FK_pharmacy-drug.medicine_id&quot;</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(&quot;medicine_id&quot;)</span>
+      <span class="s0">REFERENCES </span><span class="s1">&quot;Medicine&quot;(&quot;medicine_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;doctor-timetable&quot; (</span>
+  <span class="s1">&quot;doctor_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;weekly_plan&quot; </span><span class="s0">xml,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;doctor_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;Doctor&quot; (</span>
+  <span class="s1">&quot;doctor_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;officer_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;first_name&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;last_name&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;email_address&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">50</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;contact _number&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;specialization&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;doctor_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;bookings&quot; (</span>
+  <span class="s1">&quot;booking_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;patient_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;doctor_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;description&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">50</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;date&quot; </span><span class="s0">timestamp,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;booking_id&quot;)</span><span class="s0">,</span>
+  <span class="s0">CONSTRAINT </span><span class="s1">&quot;FK_bookings.patient_id&quot;</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(&quot;patient_id&quot;)</span>
+      <span class="s0">REFERENCES </span><span class="s1">&quot;Patient&quot;(&quot;patient_id&quot;)</span><span class="s0">,</span>
+  <span class="s0">CONSTRAINT </span><span class="s1">&quot;FK_bookings.booking_id&quot;</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(&quot;booking_id&quot;)</span>
+      <span class="s0">REFERENCES </span><span class="s1">&quot;Doctor&quot;(&quot;doctor_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;Chat&quot; (</span>
+  <span class="s1">&quot;chat_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;officer_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;patient_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;disabled&quot; </span><span class="s0">BOOLEAN,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;chat_id&quot;)</span><span class="s0">,</span>
+  <span class="s0">CONSTRAINT </span><span class="s1">&quot;FK_Chat.patient_id&quot;</span>
+    <span class="s0">FOREIGN KEY </span><span class="s1">(&quot;patient_id&quot;)</span>
+      <span class="s0">REFERENCES </span><span class="s1">&quot;Patient&quot;(&quot;patient_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;User&quot; (</span>
+  <span class="s1">&quot;user_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;hash&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">50</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s1">&quot;user_type&quot; </span><span class="s0">VARCHAR</span><span class="s1">(</span><span class="s2">20</span><span class="s1">)</span><span class="s0">,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;user_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+<span class="s0">CREATE TABLE </span><span class="s1">&quot;Medical Officer&quot; (</span>
+  <span class="s1">&quot;officer_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s1">&quot;user_id&quot; UUID</span><span class="s0">,</span>
+  <span class="s0">PRIMARY KEY </span><span class="s1">(&quot;officer_id&quot;)</span>
+<span class="s1">)</span><span class="s0">;</span>
+
+</pre>
+</body>
+</html>
